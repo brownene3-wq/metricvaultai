@@ -1578,11 +1578,13 @@
             <div class="top-bar">
                 <div class="search-container">
                     <input
-                        type="text"
+                        type="search"
                         class="search-input"
                         id="searchInput"
                         placeholder="Enter domain or URL to analyze..."
                         data-i18n="search_placeholder"
+                        autocomplete="off"
+                        name="domain-search-nofill"
                     >
                     <button class="analyze-btn" id="analyzeBtn" data-i18n="analyze_button">Analyze</button>
                 </div>
@@ -2303,7 +2305,7 @@
                             </div>
                             <div class="setting-row" style="border-top:1px solid var(--border);padding-top:16px">
                                 <div><div class="setting-label">Display Name</div><div class="setting-desc">How your name appears across the platform</div></div>
-                                <input type="text" id="displayNameInput" placeholder="Your name" style="width:160px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)">
+                                <input type="text" id="displayNameInput" placeholder="Your name" autocomplete="off" name="display-name-nofill" style="width:160px;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)">
                             </div>
                             <div style="margin-top:12px;text-align:right"><button class="report-card-btn" id="saveProfileBtn">Save Changes</button></div>
                         </div>
@@ -2315,9 +2317,9 @@
                                 <button class="report-card-btn" id="changePasswordBtn">Update</button>
                             </div>
                             <div id="passwordFields" style="display:none;margin-top:12px">
-                                <div id="currentPasswordRow" style="margin-bottom:8px"><input type="password" id="currentPasswordInput" placeholder="Current password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
-                                <div style="margin-bottom:8px"><input type="password" id="newPasswordInput" placeholder="New password (min 8 characters)" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
-                                <div style="margin-bottom:8px"><input type="password" id="confirmPasswordInput" placeholder="Confirm new password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
+                                <div id="currentPasswordRow" style="margin-bottom:8px"><input type="password" id="currentPasswordInput" placeholder="Current password" autocomplete="current-password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
+                                <div style="margin-bottom:8px"><input type="password" id="newPasswordInput" placeholder="New password (min 8 characters)" autocomplete="new-password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
+                                <div style="margin-bottom:8px"><input type="password" id="confirmPasswordInput" placeholder="Confirm new password" autocomplete="new-password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
                                 <div id="passwordMessage" style="display:none;padding:8px 12px;border-radius:6px;margin-bottom:8px;font-size:12px;"></div>
                                 <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
                                     <a href="/login" id="forgotPasswordDash" style="font-size:12px;color:var(--purple);text-decoration:none;cursor:pointer">Forgot your password?</a>
@@ -2906,6 +2908,27 @@
 
         // ===== EVENT LISTENERS =====
         document.addEventListener('DOMContentLoaded', async () => {
+            // Clear all text/search inputs to prevent browser autofill from inserting email
+            document.querySelectorAll('input[type="text"], input[type="search"]').forEach(input => {
+                input.value = '';
+            });
+            // Also clear after a short delay (Chrome sometimes autofills after DOMContentLoaded)
+            setTimeout(() => {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput && searchInput.value && searchInput.value.includes('@')) {
+                    searchInput.value = '';
+                }
+                document.querySelectorAll('input[type="text"], input[type="search"]').forEach(input => {
+                    if (input.value && input.value.includes('@')) input.value = '';
+                });
+            }, 100);
+            setTimeout(() => {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput && searchInput.value && searchInput.value.includes('@')) {
+                    searchInput.value = '';
+                }
+            }, 500);
+
             await initSupabase();
             await checkAuth();
             setLanguage(currentLanguage);
