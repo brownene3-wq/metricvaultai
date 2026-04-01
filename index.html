@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MetricVault AI - Market Intelligence Platform</title>
-  <script>(function(){var t=localStorage.getItem('mv-theme')||'light';document.documentElement.setAttribute('data-theme',t);})()</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -1582,7 +1581,7 @@
           <h3 data-i18n="pricing.starter.name">Starter</h3>
           <p class="price-desc" data-i18n="pricing.starter.desc">For individuals and small teams</p>
           <div class="price-amount"><span class="currency">$</span><span id="starterPrice">0</span><span class="period">/mo</span></div>
-          <button class="price-cta" onclick="window.location.href='login.html'" data-i18n="pricing.starter.btn">Get Started</button>
+          <button class="price-cta" onclick="openCheckout('starter')" data-i18n="pricing.starter.btn">Get Started</button>
           <ul class="price-features">
             <li data-i18n="pricing.starter.f1">Up to 10 competitors tracked</li>
             <li data-i18n="pricing.starter.f2">Basic sentiment analysis</li>
@@ -1596,7 +1595,7 @@
           <h3 data-i18n="pricing.pro.name">Pro</h3>
           <p class="price-desc" data-i18n="pricing.pro.desc">For growing businesses</p>
           <div class="price-amount"><span class="currency">$</span><span id="proPrice">49</span><span class="period">/mo</span></div>
-          <button class="price-cta" onclick="window.location.href='login.html'" data-i18n="pricing.pro.btn">Start Free Trial</button>
+          <button class="price-cta" onclick="openCheckout('pro')" data-i18n="pricing.pro.btn">Start Free Trial</button>
           <ul class="price-features">
             <li data-i18n="pricing.pro.f1">Unlimited competitors tracked</li>
             <li data-i18n="pricing.pro.f2">Advanced AI analysis</li>
@@ -1612,7 +1611,7 @@
           <h3 data-i18n="pricing.enterprise.name">Enterprise</h3>
           <p class="price-desc" data-i18n="pricing.enterprise.desc">For large organizations</p>
           <div class="price-amount"><span class="currency">$</span><span id="enterprisePrice">149</span><span class="period">/mo</span></div>
-          <button class="price-cta" onclick="window.location.href='login.html'" data-i18n="pricing.enterprise.btn">Start Free Trial</button>
+          <button class="price-cta" onclick="openCheckout('enterprise')" data-i18n="pricing.enterprise.btn">Start Free Trial</button>
           <ul class="price-features">
             <li data-i18n="pricing.enterprise.f1">Everything in Pro</li>
             <li data-i18n="pricing.enterprise.f2">Unlimited team members</li>

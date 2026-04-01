@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetricVault AI - Login</title>
-    <script>(function(){var t=localStorage.getItem('mv-theme')||'light';document.documentElement.setAttribute('data-theme',t);})()</script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -107,7 +106,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 24px 40px;
-            background: var(--surface);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
         }
@@ -745,7 +744,7 @@
         // Initialize Supabase
         const SUPABASE_URL = 'https://cnjycxhmnepvqsuyrwem.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuanljeGhtbmVwdnFzdXlyd2VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzY2NTAsImV4cCI6MjA4OTk1MjY1MH0.S5n4bGO3ifAyCN9RysMdu9clsMEjaYSA21bAMB5UftA';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // Translate text
         function updateTranslations(lang) {
@@ -819,7 +818,7 @@
             btn.innerHTML = '<span class="loading-spinner"></span>';
 
             try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                const { data, error } = await supabase.auth.signInWithPassword({ email, password });
                 if (error) throw error;
                 showMessage(translations[currentLanguage]['signin-success'] || 'Signed in successfully!', 'success');
                 setTimeout(() => window.location.href = '/dashboard.html', 1500);
@@ -840,7 +839,7 @@
             btn.innerHTML = '<span class="loading-spinner"></span>';
 
             try {
-                const { data, error } = await supabaseClient.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: { data: { full_name: fullName } }
@@ -864,7 +863,7 @@
                 return;
             }
             try {
-                const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+                const { error } = await supabase.auth.resetPasswordForEmail(email);
                 if (error) throw error;
                 showMessage(translations[currentLanguage]['password-reset-sent'], 'success');
             } catch (error) {
@@ -878,7 +877,7 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="loading-spinner"></span>';
             try {
-                const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'google',
                     options: { redirectTo: window.location.origin + '/dashboard.html' }
                 });
@@ -895,7 +894,7 @@
             btn.disabled = true;
             btn.innerHTML = '<span class="loading-spinner"></span>';
             try {
-                const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                const { data, error } = await supabase.auth.signInWithOAuth({
                     provider: 'azure',
                     options: { redirectTo: window.location.origin + '/dashboard.html' }
                 });
@@ -907,11 +906,24 @@
             }
         });
 
-        // Check if already logged in
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            if (session && event === 'SIGNED_IN') {
+        // Check if already logged in - only redirect on actual sign-in event, not on page load
+        let isInitialLoad = true;
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (session && event === 'SIGNED_IN' && !isInitialLoad) {
+                // User just signed in (not a page refresh) - redirect to dashboard
                 window.location.href = '/dashboard.html';
             }
+            if (session && event === 'INITIAL_SESSION') {
+                // Already has session on page load - show "already logged in" option
+                const container = document.querySelector('.login-box') || document.querySelector('.form-wrapper');
+                if (container) {
+                    const notice = document.createElement('div');
+                    notice.style.cssText = 'text-align:center;padding:16px;margin-bottom:16px;background:rgba(14,165,116,0.1);border:1px solid rgba(14,165,116,0.3);border-radius:12px;';
+                    notice.innerHTML = '<div style="color:#0EA574;font-weight:600;margin-bottom:4px">You\'re already signed in</div><a href="/dashboard.html" style="color:#0EA574;text-decoration:underline;font-size:14px">Go to Dashboard &rarr;</a>';
+                    container.insertBefore(notice, container.firstChild);
+                }
+            }
+            isInitialLoad = false;
         });
 
         // Handle signup hash
