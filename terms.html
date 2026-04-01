@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - MetricVault AI</title>
+    <script>(function(){var t=localStorage.getItem('mv-theme')||'light';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F9F8FF;
+            --surface: #FFFFFF;
+            --surface-hover: #F0ECFE;
+            --border: rgba(124,92,252,0.1);
+            --border-hover: rgba(124,92,252,0.2);
+            --text: #1A1033;
+            --text-secondary: #6B5FA0;
+            --text-tertiary: #8B7EB8;
+            --gold: #D4A853;
+            --gold-light: #E8D9A0;
+            --gold-dim: rgba(212,168,83,0.1);
+            --purple: #7c5cfc;
+            --purple-light: #9B6FE8;
+            --purple-dim: rgba(124,92,252,0.1);
+            --pink: #D946A8;
+            --navy: #1A1033;
+            --navy-light: #2D1F5E;
+            --emerald: #0EA574;
+            --emerald-dim: rgba(14,165,116,0.1);
+            --gradient: linear-gradient(135deg, #D946A8, #7c5cfc);
+            --gradient-text: linear-gradient(135deg, #7c5cfc, #D946A8);
+            --gradient-navy: linear-gradient(135deg, #1A1033, #2D1F5E);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 8px;
+            --shadow-sm: 0 2px 8px rgba(124,92,252,0.06);
+            --shadow-md: 0 8px 30px rgba(124,92,252,0.08);
+            --shadow-lg: 0 20px 60px rgba(124,92,252,0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg: #060d1f;
+            --surface: #0c1629;
+            --surface-hover: #111d33;
+            --border: rgba(255,255,255,0.08);
+            --border-hover: rgba(255,255,255,0.15);
+            --text: #FFFFFF;
+            --text-secondary: #a0aec0;
+            --text-tertiary: #718096;
+            --gold: #D4A853;
+            --gold-light: #E8D9A0;
+            --gold-dim: rgba(212,168,83,0.15);
+            --purple: #7c5cfc;
+            --purple-light: #9B82FC;
+            --purple-dim: rgba(124,92,252,0.15);
+            --pink: #D946A8;
+            --navy: #060d1f;
+            --navy-light: #0f1a30;
+            --emerald: #00d1b2;
+            --emerald-dim: rgba(0,209,178,0.15);
+            --gradient: linear-gradient(135deg, #00d1b2, #00b4d8);
+            --gradient-text: linear-gradient(135deg, #00d1b2, #00b4d8);
+            --gradient-navy: linear-gradient(135deg, #0a1225, #0f1a30);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.3);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(124, 92, 252, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .language-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text);
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: var(--radius-xs);
+            transition: background 0.3s ease;
+        }
+
+        .language-button:hover {
+            background: var(--gold-dim);
+        }
+
+        .language-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            min-width: 100px;
+            margin-top: 8px;
+            box-shadow: var(--shadow-md);
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .language-dropdown.active {
+            display: block;
+        }
+
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .language-option:hover {
+            background: var(--gold-dim);
+        }
+
+        .language-option.active {
+            background: var(--gold-dim);
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 48px;
+        }
+
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-heading {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--purple);
+            margin-bottom: 16px;
+            margin-top: 32px;
+        }
+
+        .section-heading:first-child {
+            margin-top: 0;
+        }
+
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .section-content p {
+            margin-bottom: 16px;
+        }
+
+        .section-content ul {
+            list-style: none;
+            margin-left: 0;
+            margin-bottom: 16px;
+        }
+
+        .section-content li {
+            padding-left: 24px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .section-content li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            color: var(--purple);
+            font-weight: 700;
+        }
+
+        .section-content strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .section-content a {
+            color: var(--purple);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .section-content a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .contact-info {
+            background: var(--purple-dim);
+            padding: 24px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--purple);
+            margin-top: 24px;
+        }
+
+        .contact-info strong {
+            color: var(--text);
+        }
+
+        /* Footer */
+        .page-footer {
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .footer-link {
+            color: var(--purple);
+            text-decoration: none;
+            font-size: 14px;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-link:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .section-heading {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/" class="logo" data-i18n="logo">MetricVault AI</a>
+            <div class="language-switcher">
+                <button class="language-button" id="langButton">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span id="langCode">EN</span>
+                </button>
+                <div class="language-dropdown" id="langDropdown">
+                    <button class="language-option active" data-lang="en" data-i18n="lang-en">English</button>
+                    <button class="language-option" data-lang="es" data-i18n="lang-es">Español</button>
+                    <button class="language-option" data-lang="fr" data-i18n="lang-fr">Français</button>
+                    <button class="language-option" data-lang="pt" data-i18n="lang-pt">Português</button>
+                    <button class="language-option" data-lang="de" data-i18n="lang-de">Deutsch</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="page-header">
+                <h1 class="page-title" data-i18n="terms-title">Terms of Service</h1>
+                <p class="page-subtitle" data-i18n="terms-updated">Last updated: March 2026</p>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-1">Acceptance of Terms</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-1-1">By accessing and using MetricVault AI, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-2">Service Description</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-2-1">MetricVault AI provides a suite of tools for advanced analytics, AI-powered insights, and metric tracking. The service is provided on an "as-is" and "as-available" basis. We make no warranties, expressed or implied, regarding the service.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-3">Account Registration</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-3-1">To use certain features of the service, you may be required to register for an account. You agree to:</p>
+                    <ul>
+                        <li data-i18n="terms-3-2">Provide accurate and complete information</li>
+                        <li data-i18n="terms-3-3">Maintain the security of your account credentials</li>
+                        <li data-i18n="terms-3-4">Accept responsibility for all activities under your account</li>
+                        <li data-i18n="terms-3-5">Notify us immediately of any unauthorized use</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-4">Subscription & Billing</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-4-1">Paid subscriptions are billed according to your chosen plan. You agree to:</p>
+                    <ul>
+                        <li data-i18n="terms-4-2">Pay all fees and charges incurred under your account</li>
+                        <li data-i18n="terms-4-3">Provide valid payment information</li>
+                        <li data-i18n="terms-4-4">Keep your billing information current</li>
+                        <li data-i18n="terms-4-5">Cancel your subscription before billing if you wish to discontinue</li>
+                    </ul>
+                    <p style="margin-top: 16px;" data-i18n="terms-4-6">Refunds are provided according to our refund policy. We reserve the right to change pricing with 30 days' notice.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-5">Acceptable Use</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-5-1">You agree not to use the service for any unlawful purposes or in any way that could damage or interfere with the service. Prohibited conduct includes:</p>
+                    <ul>
+                        <li data-i18n="terms-5-2">Engaging in any illegal activity</li>
+                        <li data-i18n="terms-5-3">Harassing, abusing, or threatening other users</li>
+                        <li data-i18n="terms-5-4">Uploading malware or viruses</li>
+                        <li data-i18n="terms-5-5">Attempting to gain unauthorized access</li>
+                        <li data-i18n="terms-5-6">Excessively loading the system</li>
+                        <li data-i18n="terms-5-7">Violating any applicable laws or regulations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-6">Intellectual Property</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-6-1">All content and materials on MetricVault AI, including text, graphics, logos, and software, are the property of MetricVault AI or its content suppliers. You may not reproduce, distribute, or transmit any content without our express written permission. You retain all rights to any content you upload or submit to the service, subject to the rights you grant to us to use such content.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-7">Limitation of Liability</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-7-1">To the fullest extent permitted by law, MetricVault AI shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, arising out of or relating to your use of or inability to use the service. Our total liability to you shall not exceed the amount you have paid for the service in the preceding 12 months.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-8">Service Availability</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-8-1">While we strive to maintain continuous service availability, we do not guarantee uninterrupted or error-free service. We reserve the right to modify, suspend, or discontinue the service with or without notice. We shall not be liable for any service interruptions or resulting damages.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-9">Termination</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-9-1">We may terminate or suspend your account and access to the service immediately, without notice, if you violate these terms. You may cancel your account at any time through your account settings. Upon termination, your right to use the service ceases immediately.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-10">Changes to Terms</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-10-1">We reserve the right to modify these terms at any time. We will notify you of significant changes by posting the updated terms on this page. Your continued use of the service after such modification constitutes your acceptance of the updated terms.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-heading" data-i18n="terms-section-11">Contact</h2>
+                <div class="section-content">
+                    <p data-i18n="terms-11-1">If you have questions about these terms or the service, please contact us at:</p>
+                    <div class="contact-info">
+                        <p><strong>MetricVault AI</strong></p>
+                        <p><strong data-i18n="terms-contact-email">Email:</strong> <a href="mailto:support@metricvaultai.com">support@metricvaultai.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <a href="/" class="footer-link" data-i18n="terms-back-home">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        // i18n translations
+        const translations = {
+            en: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'terms-title': 'Terms of Service',
+                'terms-updated': 'Last updated: March 2026',
+                'terms-section-1': 'Acceptance of Terms',
+                'terms-1-1': 'By accessing and using MetricVault AI, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.',
+                'terms-section-2': 'Service Description',
+                'terms-2-1': 'MetricVault AI provides a suite of tools for advanced analytics, AI-powered insights, and metric tracking. The service is provided on an "as-is" and "as-available" basis. We make no warranties, expressed or implied, regarding the service.',
+                'terms-section-3': 'Account Registration',
+                'terms-3-1': 'To use certain features of the service, you may be required to register for an account. You agree to:',
+                'terms-3-2': 'Provide accurate and complete information',
+                'terms-3-3': 'Maintain the security of your account credentials',
+                'terms-3-4': 'Accept responsibility for all activities under your account',
+                'terms-3-5': 'Notify us immediately of any unauthorized use',
+                'terms-section-4': 'Subscription & Billing',
+                'terms-4-1': 'Paid subscriptions are billed according to your chosen plan. You agree to:',
+                'terms-4-2': 'Pay all fees and charges incurred under your account',
+                'terms-4-3': 'Provide valid payment information',
+                'terms-4-4': 'Keep your billing information current',
+                'terms-4-5': 'Cancel your subscription before billing if you wish to discontinue',
+                'terms-4-6': 'Refunds are provided according to our refund policy. We reserve the right to change pricing with 30 days\' notice.',
+                'terms-section-5': 'Acceptable Use',
+                'terms-5-1': 'You agree not to use the service for any unlawful purposes or in any way that could damage or interfere with the service. Prohibited conduct includes:',
+                'terms-5-2': 'Engaging in any illegal activity',
+                'terms-5-3': 'Harassing, abusing, or threatening other users',
+                'terms-5-4': 'Uploading malware or viruses',
+                'terms-5-5': 'Attempting to gain unauthorized access',
+                'terms-5-6': 'Excessively loading the system',
+                'terms-5-7': 'Violating any applicable laws or regulations',
+                'terms-section-6': 'Intellectual Property',
+                'terms-6-1': 'All content and materials on MetricVault AI, including text, graphics, logos, and software, are the property of MetricVault AI or its content suppliers. You may not reproduce, distribute, or transmit any content without our express written permission. You retain all rights to any content you upload or submit to the service, subject to the rights you grant to us to use such content.',
+                'terms-section-7': 'Limitation of Liability',
+                'terms-7-1': 'To the fullest extent permitted by law, MetricVault AI shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including lost profits, arising out of or relating to your use of or inability to use the service. Our total liability to you shall not exceed the amount you have paid for the service in the preceding 12 months.',
+                'terms-section-8': 'Service Availability',
+                'terms-8-1': 'While we strive to maintain continuous service availability, we do not guarantee uninterrupted or error-free service. We reserve the right to modify, suspend, or discontinue the service with or without notice. We shall not be liable for any service interruptions or resulting damages.',
+                'terms-section-9': 'Termination',
+                'terms-9-1': 'We may terminate or suspend your account and access to the service immediately, without notice, if you violate these terms. You may cancel your account at any time through your account settings. Upon termination, your right to use the service ceases immediately.',
+                'terms-section-10': 'Changes to Terms',
+                'terms-10-1': 'We reserve the right to modify these terms at any time. We will notify you of significant changes by posting the updated terms on this page. Your continued use of the service after such modification constitutes your acceptance of the updated terms.',
+                'terms-section-11': 'Contact',
+                'terms-11-1': 'If you have questions about these terms or the service, please contact us at:',
+                'terms-contact-email': 'Email:',
+                'terms-back-home': 'Back to Home'
+            },
+            es: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'terms-title': 'Términos de Servicio',
+                'terms-updated': 'Última actualización: Marzo 2026',
+                'terms-section-1': 'Aceptación de Términos',
+                'terms-1-1': 'Al acceder y utilizar MetricVault AI, aceptas y te comprometes a cumplir con los términos y disposiciones de este acuerdo. Si no estás de acuerdo, no uses este servicio.',
+                'terms-section-2': 'Descripción del Servicio',
+                'terms-2-1': 'MetricVault AI proporciona un conjunto de herramientas para análisis avanzados, información impulsada por IA y seguimiento de métricas. El servicio se proporciona en forma "tal cual" y "disponible". No hacemos garantías, expresadas o implícitas, respecto al servicio.',
+                'terms-section-3': 'Registro de Cuenta',
+                'terms-3-1': 'Para usar ciertas características del servicio, es posible que debas registrar una cuenta. Aceptas:',
+                'terms-3-2': 'Proporcionar información precisa y completa',
+                'terms-3-3': 'Mantener la seguridad de tus credenciales de cuenta',
+                'terms-3-4': 'Aceptar responsabilidad por todas las actividades en tu cuenta',
+                'terms-3-5': 'Notificarnos inmediatamente de cualquier uso no autorizado',
+                'terms-section-4': 'Suscripción y Facturación',
+                'terms-4-1': 'Las suscripciones pagadas se facturan de acuerdo con tu plan elegido. Aceptas:',
+                'terms-4-2': 'Pagar todos los cargos e impuestos incurridos en tu cuenta',
+                'terms-4-3': 'Proporcionar información de pago válida',
+                'terms-4-4': 'Mantener actualizada tu información de facturación',
+                'terms-4-5': 'Cancelar tu suscripción antes de la facturación si deseas discontinuar',
+                'terms-4-6': 'Los reembolsos se proporcionan de acuerdo con nuestra política de reembolsos. Nos reservamos el derecho de cambiar los precios con aviso de 30 días.',
+                'terms-section-5': 'Uso Aceptable',
+                'terms-5-1': 'Aceptas no usar el servicio para fines ilegales ni de manera que pueda dañar o interferir con el servicio. La conducta prohibida incluye:',
+                'terms-5-2': 'Participar en cualquier actividad ilegal',
+                'terms-5-3': 'Acosar, abusar o amenazar a otros usuarios',
+                'terms-5-4': 'Cargar malware o virus',
+                'terms-5-5': 'Intentar obtener acceso no autorizado',
+                'terms-5-6': 'Cargar excesivamente el sistema',
+                'terms-5-7': 'Violar cualquier ley o regulación aplicable',
+                'terms-section-6': 'Propiedad Intelectual',
+                'terms-6-1': 'Todo el contenido y materiales en MetricVault AI, incluyendo texto, gráficos, logotipos y software, son propiedad de MetricVault AI o sus proveedores de contenido. No puedes reproducir, distribuir o transmitir contenido sin nuestro consentimiento escrito expreso. Retienes todos los derechos sobre cualquier contenido que cargues o envíes al servicio, sujeto a los derechos que nos otorgas para usar dicho contenido.',
+                'terms-section-7': 'Limitación de Responsabilidad',
+                'terms-7-1': 'En la mayor medida permitida por la ley, MetricVault AI no será responsable por daños indirectos, incidentales, especiales, consecuentes o punitivos, incluyendo pérdidas de ganancias, que surjan de o se relacionen con tu uso o incapacidad de usar el servicio. Nuestra responsabilidad total hacia ti no excederá la cantidad que has pagado por el servicio en los 12 meses anteriores.',
+                'terms-section-8': 'Disponibilidad del Servicio',
+                'terms-8-1': 'Aunque nos esforzamos por mantener la disponibilidad continua del servicio, no garantizamos servicio ininterrumpido o sin errores. Nos reservamos el derecho de modificar, suspender o descontinuar el servicio con o sin previo aviso. No seremos responsables por interrupciones del servicio o daños resultantes.',
+                'terms-section-9': 'Terminación',
+                'terms-9-1': 'Podemos terminar o suspender tu cuenta e acceso al servicio inmediatamente, sin previo aviso, si violas estos términos. Puedes cancelar tu cuenta en cualquier momento a través de la configuración de tu cuenta. Después de la terminación, tu derecho a usar el servicio cesa inmediatamente.',
+                'terms-section-10': 'Cambios en los Términos',
+                'terms-10-1': 'Nos reservamos el derecho de modificar estos términos en cualquier momento. Te notificaremos sobre cambios significativos publicando los términos actualizados en esta página. Tu uso continuo del servicio después de tal modificación constituye tu aceptación de los términos actualizados.',
+                'terms-section-11': 'Contacto',
+                'terms-11-1': 'Si tienes preguntas sobre estos términos o el servicio, contáctanos en:',
+                'terms-contact-email': 'Correo:',
+                'terms-back-home': 'Volver a Inicio'
+            },
+            fr: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'terms-title': 'Conditions d\'utilisation',
+                'terms-updated': 'Dernière mise à jour : Mars 2026',
+                'terms-section-1': 'Acceptation des conditions',
+                'terms-1-1': 'En accédant à et en utilisant MetricVault AI, vous acceptez et acceptez d\'être lié par les conditions et dispositions de cet accord. Si vous n\'êtes pas d\'accord, veuillez ne pas utiliser ce service.',
+                'terms-section-2': 'Description du Service',
+                'terms-2-1': 'MetricVault AI fournit une suite d\'outils pour l\'analyse avancée, les informations alimentées par l\'IA et le suivi des métriques. Le service est fourni sur une base "en l\'état" et "disponible". Nous ne donnons aucune garantie, expresse ou implicite, concernant le service.',
+                'terms-section-3': 'Enregistrement du Compte',
+                'terms-3-1': 'Pour utiliser certaines fonctionnalités du service, vous pouvez être tenu de vous enregistrer pour un compte. Vous acceptez de :',
+                'terms-3-2': 'Fournir des informations précises et complètes',
+                'terms-3-3': 'Maintenir la sécurité de vos identifiants de compte',
+                'terms-3-4': 'Accepter la responsabilité de toutes les activités sous votre compte',
+                'terms-3-5': 'Nous informer immédiatement de tout usage non autorisé',
+                'terms-section-4': 'Abonnement et Facturation',
+                'terms-4-1': 'Les abonnements payants sont facturés selon votre plan choisi. Vous acceptez de :',
+                'terms-4-2': 'Payer tous les frais et charges engagés sous votre compte',
+                'terms-4-3': 'Fournir des informations de paiement valides',
+                'terms-4-4': 'Tenir à jour vos informations de facturation',
+                'terms-4-5': 'Annuler votre abonnement avant facturation si vous souhaitez arrêter',
+                'terms-4-6': 'Les remboursements sont fournis selon notre politique de remboursement. Nous nous réservons le droit de modifier les tarifs avec un préavis de 30 jours.',
+                'terms-section-5': 'Utilisation Acceptable',
+                'terms-5-1': 'Vous acceptez de ne pas utiliser le service à des fins illégales ou d\'une manière qui pourrait endommager ou interférer avec le service. La conduite interdite inclut :',
+                'terms-5-2': 'S\'engager dans toute activité illégale',
+                'terms-5-3': 'Harceler, abuser ou menacer d\'autres utilisateurs',
+                'terms-5-4': 'Télécharger des malwares ou des virus',
+                'terms-5-5': 'Tenter d\'obtenir un accès non autorisé',
+                'terms-5-6': 'Surcharger excessivement le système',
+                'terms-5-7': 'Violer les lois ou réglementations applicables',
+                'terms-section-6': 'Propriété Intellectuelle',
+                'terms-6-1': 'Tout le contenu et les matériaux sur MetricVault AI, y compris le texte, les graphiques, les logos et les logiciels, sont la propriété de MetricVault AI ou de ses fournisseurs de contenu. Vous ne pouvez pas reproduire, distribuer ou transmettre du contenu sans notre permission écrite expresse. Vous conservez tous les droits sur tout contenu que vous téléchargez ou soumettez au service, sous réserve des droits que vous nous accordez d\'utiliser ce contenu.',
+                'terms-section-7': 'Limitation de Responsabilité',
+                'terms-7-1': 'Dans la mesure maximale autorisée par la loi, MetricVault AI ne sera pas responsable des dommages indirects, accidentels, spéciaux, consécutifs ou punitifs, y compris la perte de profits, découlant de ou liés à votre utilisation ou incapacité à utiliser le service. Notre responsabilité totale envers vous ne dépassera pas le montant que vous avez payé pour le service au cours des 12 mois précédents.',
+                'terms-section-8': 'Disponibilité du Service',
+                'terms-8-1': 'Bien que nous nous efforçons de maintenir une disponibilité continue du service, nous ne garantissons pas un service ininterrompu ou sans erreurs. Nous nous réservons le droit de modifier, suspendre ou arrêter le service avec ou sans préavis. Nous ne serons pas responsables des interruptions de service ou des dommages en résultant.',
+                'terms-section-9': 'Résiliation',
+                'terms-9-1': 'Nous pouvons résilier ou suspendre votre compte et votre accès au service immédiatement, sans avertissement, si vous violez ces conditions. Vous pouvez annuler votre compte à tout moment via les paramètres de votre compte. À la résiliation, votre droit d\'utiliser le service cesse immédiatement.',
+                'terms-section-10': 'Modifications des Conditions',
+                'terms-10-1': 'Nous nous réservons le droit de modifier ces conditions à tout moment. Nous vous informerons des modifications importantes en affichant les conditions mises à jour sur cette page. Votre utilisation continue du service après une telle modification constitue votre acceptation des conditions mises à jour.',
+                'terms-section-11': 'Contact',
+                'terms-11-1': 'Si vous avez des questions sur ces conditions ou le service, veuillez nous contacter à :',
+                'terms-contact-email': 'E-mail :',
+                'terms-back-home': 'Retour à l\'accueil'
+            },
+            pt: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'terms-title': 'Termos de Serviço',
+                'terms-updated': 'Última atualização: Março de 2026',
+                'terms-section-1': 'Aceitação dos Termos',
+                'terms-1-1': 'Ao acessar e usar o MetricVault AI, você aceita e concorda em estar vinculado pelos termos e disposições deste acordo. Se você não concordar, não use este serviço.',
+                'terms-section-2': 'Descrição do Serviço',
+                'terms-2-1': 'O MetricVault AI fornece um conjunto de ferramentas para análise avançada, insights alimentados por IA e rastreamento de métricas. O serviço é fornecido "como está" e "conforme disponível". Não fazemos garantias, expressas ou implícitas, sobre o serviço.',
+                'terms-section-3': 'Registro de Conta',
+                'terms-3-1': 'Para usar determinadas funcionalidades do serviço, você pode ser solicitado a se registrar para uma conta. Você concorda em:',
+                'terms-3-2': 'Fornecer informações precisas e completas',
+                'terms-3-3': 'Manter a segurança das credenciais da sua conta',
+                'terms-3-4': 'Aceitar responsabilidade por todas as atividades em sua conta',
+                'terms-3-5': 'Nos notificar imediatamente de qualquer uso não autorizado',
+                'terms-section-4': 'Assinatura e Faturamento',
+                'terms-4-1': 'As assinaturas pagas são faturadas de acordo com seu plano escolhido. Você concorda em:',
+                'terms-4-2': 'Pagar todas as taxas e cobranças incorridas em sua conta',
+                'terms-4-3': 'Fornecer informações de pagamento válidas',
+                'terms-4-4': 'Manter suas informações de faturamento atualizadas',
+                'terms-4-5': 'Cancelar sua assinatura antes de ser cobrado se deseja descontinuar',
+                'terms-4-6': 'Os reembolsos são fornecidos de acordo com nossa política de reembolso. Nos reservamos o direito de alterar os preços com aviso de 30 dias.',
+                'terms-section-5': 'Uso Aceitável',
+                'terms-5-1': 'Você concorda em não usar o serviço para fins ilegais ou de forma que possa prejudicar ou interferir com o serviço. A conduta proibida inclui:',
+                'terms-5-2': 'Participar de qualquer atividade ilegal',
+                'terms-5-3': 'Assediar, abusar ou ameaçar outros usuários',
+                'terms-5-4': 'Fazer upload de malware ou vírus',
+                'terms-5-5': 'Tentar obter acesso não autorizado',
+                'terms-5-6': 'Sobrecarregar excessivamente o sistema',
+                'terms-5-7': 'Violar qualquer lei ou regulamento aplicável',
+                'terms-section-6': 'Propriedade Intelectual',
+                'terms-6-1': 'Todo o conteúdo e materiais no MetricVault AI, incluindo texto, gráficos, logotipos e software, são propriedade do MetricVault AI ou de seus fornecedores de conteúdo. Você não pode reproduzir, distribuir ou transmitir conteúdo sem nossa permissão escrita expressa. Você retém todos os direitos sobre qualquer conteúdo que você carrega ou envia ao serviço, sujeito aos direitos que você nos concede para usar esse conteúdo.',
+                'terms-section-7': 'Limitação de Responsabilidade',
+                'terms-7-1': 'Na máxima extensão permitida por lei, o MetricVault AI não será responsável por danos indiretos, incidentais, especiais, consequentes ou punitivos, incluindo lucros cessantes, decorrentes de ou relacionados ao seu uso ou incapacidade de usar o serviço. Nossa responsabilidade total com você não excederá o valor que você pagou pelo serviço nos 12 meses anteriores.',
+                'terms-section-8': 'Disponibilidade do Serviço',
+                'terms-8-1': 'Embora nos esforcemos para manter a disponibilidade contínua do serviço, não garantimos serviço ininterrupto ou sem erros. Nos reservamos o direito de modificar, suspender ou descontinuar o serviço com ou sem aviso. Não seremos responsáveis por interrupções de serviço ou danos resultantes.',
+                'terms-section-9': 'Rescisão',
+                'terms-9-1': 'Podemos rescindir ou suspender sua conta e acesso ao serviço imediatamente, sem aviso, se você violar estes termos. Você pode cancelar sua conta a qualquer momento através das configurações da sua conta. Após a rescisão, seu direito de usar o serviço cessa imediatamente.',
+                'terms-section-10': 'Alterações nos Termos',
+                'terms-10-1': 'Nos reservamos o direito de modificar estes termos a qualquer momento. Notificaremos você sobre alterações significativas publicando os termos atualizados nesta página. Seu uso contínuo do serviço após tal modificação constitui sua aceitação dos termos atualizados.',
+                'terms-section-11': 'Contato',
+                'terms-11-1': 'Se você tiver dúvidas sobre estes termos ou o serviço, entre em contato conosco em:',
+                'terms-contact-email': 'E-mail:',
+                'terms-back-home': 'Voltar para Início'
+            },
+            de: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'terms-title': 'Nutzungsbedingungen',
+                'terms-updated': 'Letzte Aktualisierung: März 2026',
+                'terms-section-1': 'Akzeptanz der Bedingungen',
+                'terms-1-1': 'Durch den Zugriff auf und die Nutzung von MetricVault AI akzeptieren Sie die Bedingungen und Bestimmungen dieser Vereinbarung. Wenn Sie nicht zustimmen, verwenden Sie diesen Service nicht.',
+                'terms-section-2': 'Servicebeschreibung',
+                'terms-2-1': 'MetricVault AI bietet eine Suite von Tools für fortgeschrittene Analysen, KI-gesteuerte Erkenntnisse und Metrikverfolgung. Der Service wird auf einer "as-is"- und "as-available"-Basis bereitgestellt. Wir geben keine ausdrücklichen oder stillschweigenden Garantien bezüglich des Service.',
+                'terms-section-3': 'Kontoregistrierung',
+                'terms-3-1': 'Um bestimmte Funktionen des Service zu nutzen, müssen Sie sich möglicherweise für ein Konto anmelden. Sie erklären sich einverstanden:',
+                'terms-3-2': 'Genaue und vollständige Informationen bereitzustellen',
+                'terms-3-3': 'Die Sicherheit Ihrer Kontoanmeldedaten zu wahren',
+                'terms-3-4': 'Die Verantwortung für alle Aktivitäten auf Ihrem Konto zu übernehmen',
+                'terms-3-5': 'Uns sofort über unberechtigte Nutzung zu benachrichtigen',
+                'terms-section-4': 'Abonnement und Abrechnung',
+                'terms-4-1': 'Bezahlte Abos werden nach Ihrem gewählten Plan abgerechnet. Sie erklären sich einverstanden:',
+                'terms-4-2': 'Alle Gebühren und Entgelte auf Ihrem Konto zu zahlen',
+                'terms-4-3': 'Gültige Zahlungsinformationen bereitzustellen',
+                'terms-4-4': 'Ihre Abrechnungsinformationen aktuell zu halten',
+                'terms-4-5': 'Ihr Abonnement vor der Abrechnung zu kündigen, wenn Sie beenden möchten',
+                'terms-4-6': 'Rückerstattungen werden gemäß unserer Rückerstattungsrichtlinie gewährt. Wir behalten uns das Recht vor, die Preise mit 30 Tagen Kündigungsfrist zu ändern.',
+                'terms-section-5': 'Akzeptable Nutzung',
+                'terms-5-1': 'Sie erklären sich einverstanden, den Service nicht für illegale Zwecke oder auf eine Weise zu nutzen, die den Service beschädigen oder beeinträchtigen könnte. Untersagte Verhaltensweisen umfassen:',
+                'terms-5-2': 'Teilnahme an illegalen Aktivitäten',
+                'terms-5-3': 'Belästigung, Missbrauch oder Bedrohung anderer Nutzer',
+                'terms-5-4': 'Hochladen von Malware oder Viren',
+                'terms-5-5': 'Versuch, unbefugten Zugriff zu erlangen',
+                'terms-5-6': 'Übermäßiges Überlasten des Systems',
+                'terms-5-7': 'Verstoß gegen geltende Gesetze oder Bestimmungen',
+                'terms-section-6': 'Geistiges Eigentum',
+                'terms-6-1': 'Alle Inhalte und Materialien auf MetricVault AI, einschließlich Text, Grafiken, Logos und Software, sind Eigentum von MetricVault AI oder seinen Inhaltsanbietern. Sie dürfen Inhalte ohne unsere ausdrückliche schriftliche Genehmigung nicht vervielfältigen, verbreiten oder übertragen. Sie behalten alle Rechte an Inhalten, die Sie hochladen oder zum Service übermitteln, vorbehaltlich der Rechte, die Sie uns zur Nutzung dieser Inhalte gewähren.',
+                'terms-section-7': 'Haftungsbeschränkung',
+                'terms-7-1': 'Im größtmöglichen Umfang nach geltendem Recht haftet MetricVault AI nicht für indirekte, zufällige, besondere, Folge- oder Strafschäden, einschließlich entgangener Gewinne, die sich aus oder im Zusammenhang mit Ihrer Nutzung oder Unfähigkeit, den Service zu nutzen, ergeben. Unsere Gesamthaftung gegenüber Ihnen überschreitet nicht den Betrag, den Sie in den vorherigen 12 Monaten für den Service bezahlt haben.',
+                'terms-section-8': 'Serviceverfügbarkeit',
+                'terms-8-1': 'Obwohl wir uns bemühen, die kontinuierliche Serviceverfügbarkeit aufrechtzuerhalten, garantieren wir keinen unterbrechungsfreien oder fehlerfreien Service. Wir behalten uns das Recht vor, den Service mit oder ohne Ankündigung zu ändern, auszusetzen oder einzustellen. Wir haften nicht für Serviceunterbrechungen oder daraus resultierende Schäden.',
+                'terms-section-9': 'Beendigung',
+                'terms-9-1': 'Wir können Ihr Konto und den Zugriff auf den Service sofort ohne Ankündigung beenden oder aussetzen, wenn Sie gegen diese Bedingungen verstoßen. Sie können Ihr Konto jederzeit über Ihre Kontoeinstellungen kündigen. Nach Beendigung erlischt Ihr Recht zur Nutzung des Service sofort.',
+                'terms-section-10': 'Änderungen der Bedingungen',
+                'terms-10-1': 'Wir behalten uns das Recht vor, diese Bedingungen jederzeit zu ändern. Wir benachrichtigen Sie über wesentliche Änderungen, indem wir die aktualisierten Bedingungen auf dieser Seite veröffentlichen. Ihre weitere Nutzung des Service nach einer solchen Änderung stellt Ihre Akzeptanz der aktualisierten Bedingungen dar.',
+                'terms-section-11': 'Kontakt',
+                'terms-11-1': 'Wenn Sie Fragen zu diesen Bedingungen oder dem Service haben, kontaktieren Sie uns bitte unter:',
+                'terms-contact-email': 'E-Mail:',
+                'terms-back-home': 'Zurück zur Startseite'
+            }
+        };
+
+        let currentLanguage = localStorage.getItem('language') || 'en';
+
+        // Translate text
+        function updateTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key.startsWith('*')) {
+                    el.placeholder = translations[lang][key.substring(1)] || translations[lang][key];
+                } else {
+                    el.textContent = translations[lang][key] || el.textContent;
+                }
+            });
+        }
+
+        // Language switcher
+        document.getElementById('langButton').addEventListener('click', () => {
+            document.getElementById('langDropdown').classList.toggle('active');
+        });
+
+        document.querySelectorAll('[data-lang]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                currentLanguage = lang;
+                localStorage.setItem('language', lang);
+                document.getElementById('langCode').textContent = lang.toUpperCase();
+                document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('langDropdown').classList.remove('active');
+                updateTranslations(lang);
+            });
+        });
+
+        // Initialize language
+        updateTranslations(currentLanguage);
+        document.getElementById('langCode').textContent = currentLanguage.toUpperCase();
+        const activeLangBtn = document.querySelector(`[data-lang="${currentLanguage}"]`);
+        if (activeLangBtn) activeLangBtn.classList.add('active');
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-switcher')) {
+                document.getElementById('langDropdown').classList.remove('active');
+            }
+        });
+
+        // Theme Toggle
+        const savedTheme = localStorage.getItem('mv-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>
