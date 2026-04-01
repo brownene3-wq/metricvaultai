@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#7c5cfc">
     <title>Terms of Service - MetricVault AI</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/icon-192.svg">
+    <link rel="apple-touch-icon" href="/icon-192.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -338,9 +345,124 @@
                 padding: 40px 20px;
             }
         }
+
+        /* PWA Install Banner */
+        .install-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #7c5cfc 0%, #D946A8 100%);
+            color: white;
+            padding: 16px 24px;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1001;
+            animation: slideDown 0.4s ease-out;
+            box-shadow: 0 4px 12px rgba(124, 92, 252, 0.3);
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .install-banner.show {
+            display: flex;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .install-banner-text {
+            flex: 1;
+            min-width: 200px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .install-banner-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .install-btn {
+            background: white;
+            color: #7c5cfc;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .install-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .install-close {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .install-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 640px) {
+            .install-banner {
+                flex-direction: column;
+                padding: 12px;
+            }
+
+            .install-banner-text {
+                text-align: center;
+                font-size: 13px;
+            }
+
+            .install-banner-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .install-btn {
+                flex: 1;
+                max-width: 200px;
+            }
+        }
+
+        body.install-banner-active {
+            padding-top: 56px;
+        }
     </style>
 </head>
 <body>
+    <!-- PWA Install Banner -->
+    <div id="installBanner" class="install-banner">
+        <div class="install-banner-text" id="bannerText">Get the MetricVault AI App - Install for the best experience</div>
+        <div class="install-banner-actions">
+            <button class="install-btn" id="installBtn">Install</button>
+            <button class="install-close" id="dismissBtn">&times;</button>
+        </div>
+    </div>
+
     <div class="container">
         <nav>
             <a href="/" class="logo" data-i18n="logo">MetricVault AI</a>
@@ -774,6 +896,78 @@
         // Theme Toggle
         const savedTheme = localStorage.getItem('mv-theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // PWA Install Banner
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+        const dismissBtn = document.getElementById('dismissBtn');
+        const bannerText = document.getElementById('bannerText');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallBanner();
+        });
+
+        function showInstallBanner() {
+            const dismissed = sessionStorage.getItem('install-banner-dismissed');
+            if (!dismissed) {
+                installBanner.classList.add('show');
+                document.body.classList.add('install-banner-active');
+            }
+        }
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    deferredPrompt = null;
+                    installBanner.classList.remove('show');
+                    document.body.classList.remove('install-banner-active');
+                }
+            }
+        });
+
+        dismissBtn.addEventListener('click', () => {
+            sessionStorage.setItem('install-banner-dismissed', 'true');
+            installBanner.classList.remove('show');
+            document.body.classList.remove('install-banner-active');
+        });
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        if (isMobile && !deferredPrompt) {
+            bannerText.textContent = 'Add MetricVault AI to your Home Screen for the best experience';
+            setTimeout(showInstallBanner, 2000);
+        }
+    </script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => {
+                        console.log('Service Worker registered successfully:', reg);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+
+                setInterval(() => {
+                    navigator.serviceWorker.getRegistrations().then((registrations) => {
+                        registrations.forEach((reg) => {
+                            reg.update();
+                        });
+                    });
+                }, 60000);
+            });
+
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                console.log('New Service Worker activated');
+            });
+        }
     </script>
 </body>
 </html>
