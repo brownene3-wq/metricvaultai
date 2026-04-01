@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetricVault AI - Login</title>
+    <script>(function(){var t=localStorage.getItem('mv-theme')||'light';document.documentElement.setAttribute('data-theme',t);})()</script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F9F8FF;
+            --surface: #FFFFFF;
+            --surface-hover: #F0ECFE;
+            --border: rgba(124,92,252,0.1);
+            --border-hover: rgba(124,92,252,0.2);
+            --text: #1A1033;
+            --text-secondary: #6B5FA0;
+            --text-tertiary: #8B7EB8;
+            --gold: #D4A853;
+            --gold-light: #E8D9A0;
+            --gold-dim: rgba(212,168,83,0.1);
+            --purple: #7c5cfc;
+            --purple-light: #9B6FE8;
+            --purple-dim: rgba(124,92,252,0.1);
+            --pink: #D946A8;
+            --navy: #1A1033;
+            --navy-light: #2D1F5E;
+            --emerald: #0EA574;
+            --emerald-dim: rgba(14,165,116,0.1);
+            --gradient: linear-gradient(135deg, #D946A8, #7c5cfc);
+            --gradient-text: linear-gradient(135deg, #7c5cfc, #D946A8);
+            --gradient-navy: linear-gradient(135deg, #1A1033, #2D1F5E);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            --font-heading: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 8px;
+            --shadow-sm: 0 2px 8px rgba(124,92,252,0.06);
+            --shadow-md: 0 8px 30px rgba(124,92,252,0.08);
+            --shadow-lg: 0 20px 60px rgba(124,92,252,0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg: #060d1f;
+            --surface: #0c1629;
+            --surface-hover: #111d33;
+            --border: rgba(255,255,255,0.08);
+            --border-hover: rgba(255,255,255,0.15);
+            --text: #FFFFFF;
+            --text-secondary: #a0aec0;
+            --text-tertiary: #718096;
+            --gold: #D4A853;
+            --gold-light: #E8D9A0;
+            --gold-dim: rgba(212,168,83,0.15);
+            --purple: #7c5cfc;
+            --purple-light: #9B82FC;
+            --purple-dim: rgba(124,92,252,0.15);
+            --pink: #D946A8;
+            --navy: #060d1f;
+            --navy-light: #0f1a30;
+            --emerald: #00d1b2;
+            --emerald-dim: rgba(0,209,178,0.15);
+            --gradient: linear-gradient(135deg, #00d1b2, #00b4d8);
+            --gradient-text: linear-gradient(135deg, #00d1b2, #00b4d8);
+            --gradient-navy: linear-gradient(135deg, #0a1225, #0f1a30);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.3);
+            --shadow-lg: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(124, 92, 252, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 40px;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .language-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text);
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: var(--radius-xs);
+            transition: background 0.3s ease;
+        }
+
+        .language-button:hover {
+            background: var(--gold-dim);
+        }
+
+        .language-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            min-width: 100px;
+            margin-top: 8px;
+            box-shadow: var(--shadow-md);
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .language-dropdown.active {
+            display: block;
+        }
+
+        .language-option {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .language-option:hover {
+            background: var(--gold-dim);
+        }
+
+        .language-option.active {
+            background: var(--gold-dim);
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Main content */
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 420px;
+            padding: 48px;
+        }
+
+        .card-header {
+            margin-bottom: 32px;
+        }
+
+        .card-heading {
+            font-family: var(--font-heading);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Tabs */
+        .tab-switcher {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            color: var(--purple);
+            border-bottom-color: var(--purple);
+        }
+
+        .tab-button:hover:not(.active) {
+            color: var(--text);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .form-group.active {
+            display: block;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xs);
+            font-family: var(--font);
+            font-size: 14px;
+            color: var(--text);
+            background: var(--bg);
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--purple);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px var(--purple-dim);
+        }
+
+        input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .form-container {
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .signin-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .signup-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 24px;
+        }
+
+        .forgot-password a {
+            font-size: 13px;
+            color: var(--purple);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 92, 252, 0.3);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Social auth */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider-text {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            white-space: nowrap;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-button {
+            flex: 1;
+            padding: 12px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .social-button:hover {
+            background: var(--surface-hover);
+            border-color: var(--border-hover);
+        }
+
+        .social-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Messages */
+        .message-area {
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            border-left: 3px solid;
+        }
+
+        .message.error {
+            background: #FEF2F2;
+            color: #991B1B;
+            border-left-color: #DC2626;
+            display: block;
+        }
+
+        .message.success {
+            background: #F0FDF4;
+            color: #166534;
+            border-left-color: #22C55E;
+            display: block;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        /* Loading state */
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 20px;
+            }
+
+            .card {
+                padding: 32px 24px;
+            }
+
+            .card-heading {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/" class="logo" data-i18n="logo">MetricVault AI</a>
+            <div class="language-switcher">
+                <button class="language-button" id="langButton">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span id="langCode">EN</span>
+                </button>
+                <div class="language-dropdown" id="langDropdown">
+                    <button class="language-option active" data-lang="en" data-i18n="lang-en">English</button>
+                    <button class="language-option" data-lang="es" data-i18n="lang-es">Español</button>
+                    <button class="language-option" data-lang="fr" data-i18n="lang-fr">Français</button>
+                    <button class="language-option" data-lang="pt" data-i18n="lang-pt">Português</button>
+                    <button class="language-option" data-lang="de" data-i18n="lang-de">Deutsch</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-heading" id="cardHeading" data-i18n="welcome-back">Welcome Back</h1>
+                    <p class="card-subtitle" id="cardSubtitle" data-i18n="signin-subtitle">Sign in to your account to continue</p>
+                </div>
+
+                <div class="tab-switcher">
+                    <button class="tab-button active" id="signinTab" data-i18n="signin-tab">Sign In</button>
+                    <button class="tab-button" id="signupTab" data-i18n="signup-tab">Sign Up</button>
+                </div>
+
+                <div id="messageArea" class="message-area">
+                    <div id="message" class="message"></div>
+                </div>
+
+                <!-- Sign In Form -->
+                <div class="form-container active" id="signinForm">
+                    <div class="signin-inputs">
+                        <div>
+                            <label for="signinEmail" data-i18n="email-label">Email Address</label>
+                            <input type="email" id="signinEmail" placeholder="you@example.com" data-i18n="*email-placeholder">
+                        </div>
+                        <div>
+                            <label for="signinPassword" data-i18n="password-label">Password</label>
+                            <input type="password" id="signinPassword" placeholder="••••••••" data-i18n="*password-placeholder">
+                        </div>
+                    </div>
+                    <div class="forgot-password">
+                        <a href="#" id="forgotLink" data-i18n="forgot-password">Forgot password?</a>
+                    </div>
+                    <button class="submit-button" id="signinButton" data-i18n="signin-button">Sign In</button>
+                </div>
+
+                <!-- Sign Up Form -->
+                <div class="form-container" id="signupForm">
+                    <div class="signup-inputs">
+                        <div>
+                            <label for="signupName" data-i18n="fullname-label">Full Name</label>
+                            <input type="text" id="signupName" placeholder="John Doe" data-i18n="*fullname-placeholder">
+                        </div>
+                        <div>
+                            <label for="signupEmail" data-i18n="email-label">Email Address</label>
+                            <input type="email" id="signupEmail" placeholder="you@example.com" data-i18n="*email-placeholder">
+                        </div>
+                        <div>
+                            <label for="signupPassword" data-i18n="password-label">Password</label>
+                            <input type="password" id="signupPassword" placeholder="••••••••" data-i18n="*password-placeholder">
+                        </div>
+                    </div>
+                    <button class="submit-button" id="signupButton" data-i18n="signup-button">Create Account</button>
+                </div>
+
+                <!-- Social Auth -->
+                <div class="divider">
+                    <div class="divider-line"></div>
+                    <span class="divider-text" data-i18n="continue-with">or continue with</span>
+                    <div class="divider-line"></div>
+                </div>
+
+                <div class="social-buttons">
+                    <button class="social-button" id="googleButton" data-i18n="google-button">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span data-i18n="google">Google</span>
+                    </button>
+                    <button class="social-button" id="microsoftButton" data-i18n="microsoft-button">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="1" y="1" width="9" height="9"/><rect x="14" y="1" width="9" height="9"/><rect x="1" y="14" width="9" height="9"/><rect x="14" y="14" width="9" height="9"/>
+                        </svg>
+                        <span data-i18n="microsoft">Microsoft</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // i18n translations
+        const translations = {
+            en: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'welcome-back': 'Welcome Back',
+                'signin-subtitle': 'Sign in to your account to continue',
+                'signin-tab': 'Sign In',
+                'signup-tab': 'Sign Up',
+                'email-label': 'Email Address',
+                'email-placeholder': 'you@example.com',
+                'password-label': 'Password',
+                'password-placeholder': '••••••••',
+                'fullname-label': 'Full Name',
+                'fullname-placeholder': 'John Doe',
+                'forgot-password': 'Forgot password?',
+                'signin-button': 'Sign In',
+                'signup-button': 'Create Account',
+                'continue-with': 'or continue with',
+                'google': 'Google',
+                'microsoft': 'Microsoft',
+                'signin-error': 'Invalid email or password',
+                'signup-error': 'Could not create account',
+                'signup-success': 'Account created successfully!',
+                'password-reset-sent': 'Password reset email sent',
+                'loading': 'Loading...'
+            },
+            es: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'welcome-back': 'Bienvenido de Nuevo',
+                'signin-subtitle': 'Inicia sesión en tu cuenta para continuar',
+                'signin-tab': 'Iniciar Sesión',
+                'signup-tab': 'Crear Cuenta',
+                'email-label': 'Dirección de Correo',
+                'email-placeholder': 'tu@ejemplo.com',
+                'password-label': 'Contraseña',
+                'password-placeholder': '••••••••',
+                'fullname-label': 'Nombre Completo',
+                'fullname-placeholder': 'Juan Pérez',
+                'forgot-password': '¿Olvidaste tu contraseña?',
+                'signin-button': 'Iniciar Sesión',
+                'signup-button': 'Crear Cuenta',
+                'continue-with': 'o continúa con',
+                'google': 'Google',
+                'microsoft': 'Microsoft',
+                'signin-error': 'Correo o contraseña inválidos',
+                'signup-error': 'No se pudo crear la cuenta',
+                'signup-success': '¡Cuenta creada exitosamente!',
+                'password-reset-sent': 'Email de recuperación enviado',
+                'loading': 'Cargando...'
+            },
+            fr: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'welcome-back': 'Bienvenue',
+                'signin-subtitle': 'Connectez-vous à votre compte pour continuer',
+                'signin-tab': 'Connexion',
+                'signup-tab': 'Créer un Compte',
+                'email-label': 'Adresse Email',
+                'email-placeholder': 'vous@exemple.com',
+                'password-label': 'Mot de Passe',
+                'password-placeholder': '••••••••',
+                'fullname-label': 'Nom Complet',
+                'fullname-placeholder': 'Jean Dupont',
+                'forgot-password': 'Mot de passe oublié ?',
+                'signin-button': 'Connexion',
+                'signup-button': 'Créer un Compte',
+                'continue-with': 'ou continuer avec',
+                'google': 'Google',
+                'microsoft': 'Microsoft',
+                'signin-error': 'Email ou mot de passe invalide',
+                'signup-error': 'Impossible de créer le compte',
+                'signup-success': 'Compte créé avec succès !',
+                'password-reset-sent': 'Email de réinitialisation envoyé',
+                'loading': 'Chargement...'
+            },
+            pt: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'welcome-back': 'Bem-vindo de Volta',
+                'signin-subtitle': 'Faça login em sua conta para continuar',
+                'signin-tab': 'Entrar',
+                'signup-tab': 'Criar Conta',
+                'email-label': 'Endereço de Email',
+                'email-placeholder': 'voce@exemplo.com',
+                'password-label': 'Senha',
+                'password-placeholder': '••••••••',
+                'fullname-label': 'Nome Completo',
+                'fullname-placeholder': 'João Silva',
+                'forgot-password': 'Esqueceu sua senha?',
+                'signin-button': 'Entrar',
+                'signup-button': 'Criar Conta',
+                'continue-with': 'ou continue com',
+                'google': 'Google',
+                'microsoft': 'Microsoft',
+                'signin-error': 'Email ou senha inválidos',
+                'signup-error': 'Não foi possível criar a conta',
+                'signup-success': 'Conta criada com sucesso!',
+                'password-reset-sent': 'Email de recuperação enviado',
+                'loading': 'Carregando...'
+            },
+            de: {
+                logo: 'MetricVault AI',
+                'lang-en': 'English',
+                'lang-es': 'Español',
+                'lang-fr': 'Français',
+                'lang-pt': 'Português',
+                'lang-de': 'Deutsch',
+                'welcome-back': 'Willkommen Zurück',
+                'signin-subtitle': 'Melden Sie sich bei Ihrem Konto an, um fortzufahren',
+                'signin-tab': 'Anmelden',
+                'signup-tab': 'Konto Erstellen',
+                'email-label': 'E-Mail-Adresse',
+                'email-placeholder': 'sie@beispiel.de',
+                'password-label': 'Passwort',
+                'password-placeholder': '••••••••',
+                'fullname-label': 'Vollständiger Name',
+                'fullname-placeholder': 'Max Mustermann',
+                'forgot-password': 'Passwort vergessen?',
+                'signin-button': 'Anmelden',
+                'signup-button': 'Konto Erstellen',
+                'continue-with': 'oder fortfahren mit',
+                'google': 'Google',
+                'microsoft': 'Microsoft',
+                'signin-error': 'Ungültige E-Mail oder Passwort',
+                'signup-error': 'Konto konnte nicht erstellt werden',
+                'signup-success': 'Konto erfolgreich erstellt!',
+                'password-reset-sent': 'Passwort-Zurücksetzen E-Mail gesendet',
+                'loading': 'Wird geladen...'
+            }
+        };
+
+        let currentLanguage = localStorage.getItem('language') || 'en';
+
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://cnjycxhmnepvqsuyrwem.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNuanljeGhtbmVwdnFzdXlyd2VtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzY2NTAsImV4cCI6MjA4OTk1MjY1MH0.S5n4bGO3ifAyCN9RysMdu9clsMEjaYSA21bAMB5UftA';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Translate text
+        function updateTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key.startsWith('*')) {
+                    el.placeholder = translations[lang][key.substring(1)] || translations[lang][key];
+                } else {
+                    el.textContent = translations[lang][key] || el.textContent;
+                }
+            });
+        }
+
+        // Language switcher
+        document.getElementById('langButton').addEventListener('click', () => {
+            document.getElementById('langDropdown').classList.toggle('active');
+        });
+
+        document.querySelectorAll('[data-lang]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                currentLanguage = lang;
+                localStorage.setItem('language', lang);
+                document.getElementById('langCode').textContent = lang.toUpperCase();
+                document.querySelectorAll('[data-lang]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById('langDropdown').classList.remove('active');
+                updateTranslations(lang);
+            });
+        });
+
+        // Tab switching
+        document.getElementById('signinTab').addEventListener('click', () => {
+            document.getElementById('signinTab').classList.add('active');
+            document.getElementById('signupTab').classList.remove('active');
+            document.getElementById('signinForm').classList.add('active');
+            document.getElementById('signupForm').classList.remove('active');
+            document.getElementById('cardHeading').textContent = translations[currentLanguage]['welcome-back'];
+            document.getElementById('cardSubtitle').textContent = translations[currentLanguage]['signin-subtitle'];
+        });
+
+        document.getElementById('signupTab').addEventListener('click', () => {
+            document.getElementById('signupTab').classList.add('active');
+            document.getElementById('signinTab').classList.remove('active');
+            document.getElementById('signupForm').classList.add('active');
+            document.getElementById('signinForm').classList.remove('active');
+            document.getElementById('cardHeading').textContent = translations[currentLanguage]['signup-tab'];
+            document.getElementById('cardSubtitle').textContent = translations[currentLanguage]['signup-subtitle'] || '';
+        });
+
+        // Show message
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            const messageArea = document.getElementById('messageArea');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type} show`;
+            messageArea.style.display = 'block';
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageArea.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Sign in
+        document.getElementById('signinButton').addEventListener('click', async () => {
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            const btn = document.getElementById('signinButton');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span>';
+
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                if (error) throw error;
+                showMessage(translations[currentLanguage]['signin-success'] || 'Signed in successfully!', 'success');
+                setTimeout(() => window.location.href = '/dashboard.html', 1500);
+            } catch (error) {
+                showMessage(translations[currentLanguage]['signin-error'], 'error');
+                btn.disabled = false;
+                btn.textContent = translations[currentLanguage]['signin-button'];
+            }
+        });
+
+        // Sign up
+        document.getElementById('signupButton').addEventListener('click', async () => {
+            const fullName = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const btn = document.getElementById('signupButton');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span>';
+
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email,
+                    password,
+                    options: { data: { full_name: fullName } }
+                });
+                if (error) throw error;
+                showMessage(translations[currentLanguage]['signup-success'], 'success');
+                setTimeout(() => window.location.href = '/dashboard.html', 1500);
+            } catch (error) {
+                showMessage(translations[currentLanguage]['signup-error'], 'error');
+                btn.disabled = false;
+                btn.textContent = translations[currentLanguage]['signup-button'];
+            }
+        });
+
+        // Forgot password
+        document.getElementById('forgotLink').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signinEmail').value;
+            if (!email) {
+                showMessage('Please enter your email address', 'error');
+                return;
+            }
+            try {
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+                if (error) throw error;
+                showMessage(translations[currentLanguage]['password-reset-sent'], 'success');
+            } catch (error) {
+                showMessage('Error sending reset email', 'error');
+            }
+        });
+
+        // Social auth
+        document.getElementById('googleButton').addEventListener('click', async () => {
+            const btn = document.getElementById('googleButton');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span>';
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: { redirectTo: window.location.origin + '/dashboard.html' }
+                });
+                if (error) throw error;
+            } catch (error) {
+                showMessage('Error with Google sign in', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg><span>Google</span>';
+            }
+        });
+
+        document.getElementById('microsoftButton').addEventListener('click', async () => {
+            const btn = document.getElementById('microsoftButton');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span>';
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithOAuth({
+                    provider: 'azure',
+                    options: { redirectTo: window.location.origin + '/dashboard.html' }
+                });
+                if (error) throw error;
+            } catch (error) {
+                showMessage('Error with Microsoft sign in', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="1" width="9" height="9"/><rect x="14" y="1" width="9" height="9"/><rect x="1" y="14" width="9" height="9"/><rect x="14" y="14" width="9" height="9"/></svg><span>Microsoft</span>';
+            }
+        });
+
+        // Check if already logged in
+        supabaseClient.auth.onAuthStateChange((event, session) => {
+            if (session && event === 'SIGNED_IN') {
+                window.location.href = '/dashboard.html';
+            }
+        });
+
+        // Handle signup hash
+        if (window.location.hash === '#signup') {
+            document.getElementById('signupTab').click();
+        }
+
+        // Initialize language
+        updateTranslations(currentLanguage);
+        document.getElementById('langCode').textContent = currentLanguage.toUpperCase();
+        const activeLangBtn = document.querySelector(`[data-lang="${currentLanguage}"]`);
+        if (activeLangBtn) activeLangBtn.classList.add('active');
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-switcher')) {
+                document.getElementById('langDropdown').classList.remove('active');
+            }
+        });
+
+        // Theme Toggle
+        const savedTheme = localStorage.getItem('mv-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>
