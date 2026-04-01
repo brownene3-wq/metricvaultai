@@ -708,6 +708,25 @@
                 </div>
             </div>
         </div>
+
+        <!-- Password Reset Form (shown when redirected from reset email) -->
+        <div id="resetPasswordCard" class="card" style="display:none;">
+            <h1>Set New Password</h1>
+            <p class="subtitle">Enter your new password below</p>
+            <div class="form-group">
+                <label for="resetNewPassword">New Password</label>
+                <input type="password" id="resetNewPassword" placeholder="Min 8 characters">
+            </div>
+            <div class="form-group">
+                <label for="resetConfirmPassword">Confirm Password</label>
+                <input type="password" id="resetConfirmPassword" placeholder="Re-enter password">
+            </div>
+            <div id="resetMessage" style="display:none;padding:10px 14px;border-radius:8px;margin-bottom:16px;font-size:13px;"></div>
+            <button class="auth-button" id="resetSaveBtn">Save New Password</button>
+            <div style="text-align:center;margin-top:16px">
+                <a href="/login" style="color:#7c5cfc;text-decoration:none;font-size:13px;">Back to Sign In</a>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -985,7 +1004,9 @@
                 return;
             }
             try {
-                const { error } = await supabase.auth.resetPasswordForEmail(email);
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                    redirectTo: window.location.origin + '/login.html?mode=reset'
+                });
                 if (error) throw error;
                 showMessage(translations[currentLanguage]['password-reset-sent'], 'success');
             } catch (error) {
@@ -1114,6 +1135,65 @@
             bannerText.textContent = 'Add MetricVault AI to your Home Screen for the best experience';
             setTimeout(showInstallBanner, 2000);
         }
+
+        // Password Reset Flow - detect recovery event from Supabase email link
+        supabase.auth.onAuthStateChange((event, session) => {
+            if (event === 'PASSWORD_RECOVERY') {
+                // User arrived from a password reset email — show the reset form
+                document.querySelector('.card:not(#resetPasswordCard)').style.display = 'none';
+                document.getElementById('resetPasswordCard').style.display = 'block';
+            }
+        });
+
+        // Also detect ?mode=reset or type=recovery in URL (Supabase redirect)
+        const urlParams = new URLSearchParams(window.location.search);
+        const hashParams = new URLSearchParams(window.location.hash.replace('#', '?'));
+        if (urlParams.get('mode') === 'reset' || hashParams.get('type') === 'recovery') {
+            // Wait a moment for Supabase to process the token, then show reset form
+            setTimeout(() => {
+                document.querySelector('.card:not(#resetPasswordCard)').style.display = 'none';
+                document.getElementById('resetPasswordCard').style.display = 'block';
+            }, 500);
+        }
+
+        // Save new password button
+        document.getElementById('resetSaveBtn').addEventListener('click', async () => {
+            const newPass = document.getElementById('resetNewPassword').value;
+            const confirmPass = document.getElementById('resetConfirmPassword').value;
+            const msgEl = document.getElementById('resetMessage');
+
+            function showResetMsg(text, type) {
+                msgEl.style.display = 'block';
+                msgEl.textContent = text;
+                msgEl.style.background = type === 'error' ? 'rgba(239,68,68,0.1)' : 'rgba(14,165,116,0.1)';
+                msgEl.style.color = type === 'error' ? '#ef4444' : '#0EA574';
+                msgEl.style.border = '1px solid ' + (type === 'error' ? 'rgba(239,68,68,0.3)' : 'rgba(14,165,116,0.3)');
+            }
+
+            if (!newPass || newPass.length < 8) {
+                showResetMsg('Password must be at least 8 characters', 'error');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                showResetMsg('Passwords do not match', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('resetSaveBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                const { error } = await supabase.auth.updateUser({ password: newPass });
+                if (error) throw error;
+                showResetMsg('Password updated successfully! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = '/dashboard'; }, 2000);
+            } catch (error) {
+                showResetMsg('Error: ' + error.message, 'error');
+                btn.disabled = false;
+                btn.textContent = 'Save New Password';
+            }
+        });
     </script>
 
     <!-- Service Worker Registration -->

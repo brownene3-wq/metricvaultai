@@ -2311,15 +2311,20 @@
                         <div class="settings-card">
                             <h3>Security</h3>
                             <div class="setting-row">
-                                <div><div class="setting-label">Change Password</div><div class="setting-desc">Update your account password</div></div>
+                                <div><div class="setting-label" id="passwordLabel">Change Password</div><div class="setting-desc" id="passwordDesc">Update your account password</div></div>
                                 <button class="report-card-btn" id="changePasswordBtn">Update</button>
                             </div>
                             <div id="passwordFields" style="display:none;margin-top:12px">
+                                <div id="currentPasswordRow" style="margin-bottom:8px"><input type="password" id="currentPasswordInput" placeholder="Current password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
                                 <div style="margin-bottom:8px"><input type="password" id="newPasswordInput" placeholder="New password (min 8 characters)" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
-                                <div style="margin-bottom:12px"><input type="password" id="confirmPasswordInput" placeholder="Confirm new password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
-                                <div style="display:flex;gap:8px;justify-content:flex-end">
-                                    <button class="report-card-btn" id="cancelPasswordBtn" style="opacity:0.7">Cancel</button>
-                                    <button class="report-card-btn" id="savePasswordBtn" style="background:var(--purple);color:#fff">Save Password</button>
+                                <div style="margin-bottom:8px"><input type="password" id="confirmPasswordInput" placeholder="Confirm new password" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--bg);color:var(--text);font-size:13px;font-family:var(--font)"></div>
+                                <div id="passwordMessage" style="display:none;padding:8px 12px;border-radius:6px;margin-bottom:8px;font-size:12px;"></div>
+                                <div style="display:flex;gap:8px;justify-content:space-between;align-items:center">
+                                    <a href="/login" id="forgotPasswordDash" style="font-size:12px;color:var(--purple);text-decoration:none;cursor:pointer">Forgot your password?</a>
+                                    <div style="display:flex;gap:8px">
+                                        <button class="report-card-btn" id="cancelPasswordBtn" style="opacity:0.7">Cancel</button>
+                                        <button class="report-card-btn" id="savePasswordBtn" style="background:var(--purple);color:#fff">Save Password</button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="setting-row">
@@ -3051,33 +3056,125 @@
                 document.querySelector('[data-section="account"]').click();
             });
 
+            // Password change - detect if user signed in via OAuth (Google/Microsoft)
+            let isOAuthUser = false;
+            if (supabaseClient) {
+                supabaseClient.auth.getUser().then(({ data }) => {
+                    if (data?.user) {
+                        const provider = data.user.app_metadata?.provider;
+                        const providers = data.user.app_metadata?.providers || [];
+                        isOAuthUser = provider === 'google' || provider === 'azure' || providers.includes('google') || providers.includes('azure');
+                        if (isOAuthUser) {
+                            document.getElementById('passwordLabel').textContent = 'Set Password';
+                            document.getElementById('passwordDesc').textContent = 'You signed in with ' + (provider === 'google' ? 'Google' : provider === 'azure' ? 'Microsoft' : 'OAuth') + '. Set a password to also sign in with email.';
+                            document.getElementById('changePasswordBtn').textContent = 'Set Password';
+                            document.getElementById('currentPasswordRow').style.display = 'none';
+                        }
+                    }
+                });
+            }
+
+            function showPasswordMsg(text, type) {
+                const el = document.getElementById('passwordMessage');
+                el.style.display = 'block';
+                el.textContent = text;
+                el.style.background = type === 'error' ? 'rgba(239,68,68,0.1)' : 'rgba(14,165,116,0.1)';
+                el.style.color = type === 'error' ? '#ef4444' : '#0EA574';
+                el.style.border = '1px solid ' + (type === 'error' ? 'rgba(239,68,68,0.3)' : 'rgba(14,165,116,0.3)');
+            }
+
             // Password change toggle
             document.getElementById('changePasswordBtn').addEventListener('click', function() {
                 const fields = document.getElementById('passwordFields');
                 fields.style.display = fields.style.display === 'none' ? 'block' : 'none';
+                document.getElementById('passwordMessage').style.display = 'none';
             });
             document.getElementById('cancelPasswordBtn').addEventListener('click', function() {
                 document.getElementById('passwordFields').style.display = 'none';
+                document.getElementById('currentPasswordInput').value = '';
                 document.getElementById('newPasswordInput').value = '';
                 document.getElementById('confirmPasswordInput').value = '';
+                document.getElementById('passwordMessage').style.display = 'none';
             });
-            document.getElementById('savePasswordBtn').addEventListener('click', async function() {
-                const newPass = document.getElementById('newPasswordInput').value;
-                const confirmPass = document.getElementById('confirmPasswordInput').value;
-                if (newPass.length < 8) { alert('Password must be at least 8 characters'); return; }
-                if (newPass !== confirmPass) { alert('Passwords do not match'); return; }
+
+            // Forgot password link in dashboard
+            document.getElementById('forgotPasswordDash').addEventListener('click', async function(e) {
+                e.preventDefault();
                 try {
-                    if (supabaseClient) {
-                        const { error } = await supabaseClient.auth.updateUser({ password: newPass });
-                        if (error) throw error;
-                        alert('Password updated successfully!');
-                        document.getElementById('passwordFields').style.display = 'none';
-                        document.getElementById('newPasswordInput').value = '';
-                        document.getElementById('confirmPasswordInput').value = '';
+                    const { data } = await supabaseClient.auth.getUser();
+                    if (data?.user?.email) {
+                        await supabaseClient.auth.resetPasswordForEmail(data.user.email, {
+                            redirectTo: window.location.origin + '/login?mode=reset'
+                        });
+                        showPasswordMsg('Password reset email sent to ' + data.user.email + '. Check your inbox!', 'success');
                     }
                 } catch(e) {
-                    alert('Error updating password: ' + e.message);
+                    showPasswordMsg('Error sending reset email: ' + e.message, 'error');
                 }
+            });
+
+            document.getElementById('savePasswordBtn').addEventListener('click', async function() {
+                const currentPass = document.getElementById('currentPasswordInput').value;
+                const newPass = document.getElementById('newPasswordInput').value;
+                const confirmPass = document.getElementById('confirmPasswordInput').value;
+
+                // Validate
+                if (!isOAuthUser && !currentPass) {
+                    showPasswordMsg('Please enter your current password', 'error');
+                    return;
+                }
+                if (newPass.length < 8) { showPasswordMsg('New password must be at least 8 characters', 'error'); return; }
+                if (newPass !== confirmPass) { showPasswordMsg('Passwords do not match', 'error'); return; }
+
+                const btn = this;
+                btn.disabled = true;
+                btn.textContent = 'Saving...';
+
+                try {
+                    if (supabaseClient) {
+                        // For non-OAuth users, verify current password by re-signing in
+                        if (!isOAuthUser) {
+                            const { data: userData } = await supabaseClient.auth.getUser();
+                            const { error: signInError } = await supabaseClient.auth.signInWithPassword({
+                                email: userData.user.email,
+                                password: currentPass
+                            });
+                            if (signInError) {
+                                showPasswordMsg('Current password is incorrect', 'error');
+                                btn.disabled = false;
+                                btn.textContent = 'Save Password';
+                                return;
+                            }
+                        }
+
+                        // Update the password
+                        const { error } = await supabaseClient.auth.updateUser({ password: newPass });
+                        if (error) throw error;
+
+                        showPasswordMsg('Password updated successfully!', 'success');
+                        document.getElementById('currentPasswordInput').value = '';
+                        document.getElementById('newPasswordInput').value = '';
+                        document.getElementById('confirmPasswordInput').value = '';
+
+                        // If was OAuth user, update the UI
+                        if (isOAuthUser) {
+                            isOAuthUser = false;
+                            document.getElementById('passwordLabel').textContent = 'Change Password';
+                            document.getElementById('passwordDesc').textContent = 'Update your account password';
+                            document.getElementById('changePasswordBtn').textContent = 'Update';
+                            document.getElementById('currentPasswordRow').style.display = 'block';
+                        }
+
+                        setTimeout(() => {
+                            document.getElementById('passwordFields').style.display = 'none';
+                            document.getElementById('passwordMessage').style.display = 'none';
+                        }, 3000);
+                    }
+                } catch(e) {
+                    showPasswordMsg('Error: ' + e.message, 'error');
+                }
+                btn.disabled = false;
+                btn.textContent = 'Save Password';
             });
 
             // Save profile
